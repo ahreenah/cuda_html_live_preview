@@ -10,9 +10,9 @@ from subprocess import Popen, PIPE
 os.chdir(os.path.dirname(__file__))
 
 try:
-    process=Popen('python3 server.py')
+    process=Popen(['python3','server.py'])
 except:
-    process=Popen('python server.py')
+    process=Popen(['python','server.py'])
 finally:
     pass
     
@@ -51,5 +51,11 @@ class Command:
         global process
         global server_running
         if not server_running:
-            process=Popen('python C:\\ProgramFiles\\CudaText3\\py\\cuda_html_live_preview\\server.py')
+            os.chdir(os.path.dirname(__file__))
+            try:
+                process=Popen(['python3','server.py'])
+            except:
+                process=Popen(['python','server.py'])
+            finally:
+                pass
             server_running=True 
