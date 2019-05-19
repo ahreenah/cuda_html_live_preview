@@ -1,0 +1,16 @@
+[info]
+title=HTML live preview
+desc=Some description
+type=cudatext-plugin
+subdir=cuda_html_live_preview
+homepage=
+
+[item1]
+section=events
+events=on_change_slow
+
+[item2]
+section=commands
+caption=MySample
+method=run
+
