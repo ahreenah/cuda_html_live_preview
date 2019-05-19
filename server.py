@@ -1,12 +1,17 @@
 from flask import Flask, request, send_file
 import os
 
+#import logging
+#log = logging.getLogger('werkzeug')
+#log.setLevel(logging.ERROR)
+
 os.chdir('C:\\ProgramFiles\\CudaText3\\py\\cuda_html_live_preview')
 
 text=''
 nump=0
 
-app=Flask(__name__)
+app=Flask(__name__) 
+app.config['DEBUG'] = False
 
 script='''
 <script type='text/javascript'>
@@ -62,21 +67,27 @@ setInterval(monitor,1000);
 </script>
 '''
 
-@app.route('/setpath/<path>')
+fullpath=''
+
+@app.route('/setpath/<path:path>')
 def pathpage(path):
-    print('PATH WAS SET TO: '+path.replace('##sep##',os.sep))
+    print(path)
+    global fullpath
+    fullpath=path.replace('##sep##',os.sep)
+    print('path was set')
+    print('PATH WAS SET TO TO: '+path.replace('##sep##',os.sep))
     os.chdir(path.replace('##sep##',os.sep))
     return ''
 
 @app.route('/view')
 def view():
-    global text
+    global text 
     return script+text+'<br>'
     
 @app.route('/set/<new_text>')
 def set(new_text):
     global text
-    global nump
+    global nump 
     nump+=1
     text=new_text.replace('__UIUIU**__','/')
     return ''
@@ -86,6 +97,7 @@ def num():
     global num
     return str(nump)
 
+'''
 @app.route('/<path>')
 def path(path):
     print('---------------------')
@@ -95,5 +107,16 @@ def path(path):
       return open(path)
     else:
       return '404 Error'
+'''
+
+@app.route('/<path:path>')
+def catch_all(path):
+    global fullpath
+    print(fullpath)
+    os.chdir(fullpath)
+    if os.path.exists(os.path.abspath(path)):
+        
+        return send_file(os.path.abspath(path))
+    return 'You want path: %s' % os.path.abspath(path)
     
 app.run()
