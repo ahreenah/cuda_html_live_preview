@@ -13,7 +13,6 @@ def show(text):
     #req_text = req_text.replace('src=\'','src=\''+abs_url+os.sep)
     req_text=urllib.parse.quote(req_text)
     # "src"
-    print('http://127.0.0.1:5000/set/'+req_text)  
     urllib.request.urlopen('http://127.0.0.1:5000/set/'+req_text)
 
 class Command:
@@ -25,12 +24,5 @@ class Command:
         pass
                 
     def on_change_slow(self, ed_self):
-        
-        show(str(ed_self.get_text_all()).replace('\n','').replace('/','__UIUIU**__'))
-        '''path=ed.get_filename()
-        if os.sep in path:
-                path=path[:-1]
-        print(path)
-        urllib.request.urlopen('http://127.0.0.1:5000/setpath/'+path.replace(os.sep,'##sep##'))
-        print(type(str(ed_self.get_text_all())))'''
+        show(str(ed_self.get_text_all()).replace('\n',' ').replace('/','__UIUIU**__'))
         pass
