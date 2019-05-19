@@ -89,7 +89,7 @@ def set(new_text):
     global text
     global nump 
     nump+=1
-    text=new_text.replace('__UIUIU**__','/')
+    text=new_text.replace('%01','/')
     return ''
     
 @app.route('/num')
