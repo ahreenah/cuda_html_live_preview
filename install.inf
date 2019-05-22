@@ -11,12 +11,13 @@ section=events
 events=on_change_slow
 lexers=$html
 
-[item2]
-section=commands
-caption=HTML Live Preview\Stop server
-method=stop_server
 
-[item3]
+[item2]
 section=commands
 caption=HTML Live Preview\Start server
 method=start_server
+
+[item3]
+section=commands
+caption=HTML Live Preview\Stop server
+method=stop_server

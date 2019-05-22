@@ -5,7 +5,7 @@ import os
 #log = logging.getLogger('werkzeug')
 #log.setLevel(logging.ERROR)
 
-os.chdir('C:\\ProgramFiles\\CudaText3\\py\\cuda_html_live_preview')
+#os.chdir('C:\\ProgramFiles\\CudaText3\\py\\cuda_html_live_preview')
 
 text=''
 nump=0
