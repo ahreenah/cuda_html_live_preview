@@ -8,15 +8,23 @@ import asyncio
 from subprocess import Popen, PIPE
 import webbrowser
 
+fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_html_preview.ini')
+
+def get_browser_name():
+    return ini_read(fn_config,'op','browser_path','chrome')
+
+browser_name=get_browser_name()
+print(browser_name)
+
 os.chdir(os.path.dirname(__file__))
 
 try:
     process=Popen(['python3','server.py'])
-    webbrowser.open('127.0.0.1:5000/view')
+    os.system('%s 127.0.0.1:5000/view'%(browser_name))
 except:
     try:
         process=Popen(['python','server.py'])
-        webbrowser.open('127.0.0.1:5000/view')
+        os.system('%s 127.0.0.1:5000/view'%(browser_name))
     except:
         msg_box("Cannot start server. Check that you have Python 3 installed and listed in the PATH.",MB_OK)
     finally:
@@ -69,13 +77,13 @@ class Command:
         os.chdir(os.path.dirname(__file__))
         try:
             process=Popen(['python3','server.py'])
+            os.system('%s 127.0.0.1:5000/view'%(browser_name))
         except:
             try:
                 process=Popen(['python','server.py'])
-                webbrowser.open('127.0.0.1:5000/view')
+                os.system('%s 127.0.0.1:5000/view'%(browser_name))
             except:
                 msg_box("Cannot start server. Check that you have Python 3 installed and listed in the PATH.",MB_OK)
-                webbrowser.open('127.0.0.1:5000/view')
         finally:
             pass
         server_running=True 
