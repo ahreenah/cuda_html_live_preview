@@ -21,3 +21,8 @@ method=start_server
 section=commands
 caption=HTML Live Preview\Stop server
 method=stop_server
+
+[item4]
+section=commands
+caption=HTML Live Preview\Config
+method=config

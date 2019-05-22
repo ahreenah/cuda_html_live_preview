@@ -1,5 +1,6 @@
 from flask import Flask, request, send_file
 import os
+import sys
 
 #import logging
 #log = logging.getLogger('werkzeug')
@@ -119,4 +120,4 @@ def catch_all(path):
         return send_file(os.path.abspath(path))
     return 'You want path: %s' % os.path.abspath(path)
     
-app.run()
+app.run(port=int(sys.argv[1]))
