@@ -110,7 +110,6 @@ def num():
 def catch_all(path):
     try:
         global fullpath
-        print(fullpath)
         os.chdir(fullpath)
         abspath=os.path.abspath(path)
         if os.path.exists(abspath):
