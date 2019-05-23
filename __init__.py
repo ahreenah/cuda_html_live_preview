@@ -48,19 +48,30 @@ class Command:
             server_running=False 
         
     def start_server(self):
-        global process
         global server_running
         global port
-        servername=os.path.dirname(__file__)+os.sep+'server.py'
+        
+        if server_running:
+            msg_box('Server is already running.',MB_OK+MB_ICONINFO)
+            return
+        
+        def work(python):
+            global process
+            process=Popen([
+                python,
+                os.path.dirname(__file__)+os.sep+'server.py',
+                port
+                ])
+            Popen([
+                browser_name, 
+                '127.0.0.1:'+port+'/view'
+                ])
         try:
-            process=Popen(['python3',servername,port])
-            os.system('%s 127.0.0.1:'%(browser_name)+port+'/view')
+            work('python3')
+            server_running=True 
         except:
             try:
-                process=Popen(['python',servername,port])
-                os.system('%s 127.0.0.1:'%(browser_name)+port+'/view')
+                work('python')
+                server_running=True 
             except:
-                msg_box("Cannot start server. Check that you have Python 3 installed and listed in the PATH.",MB_OK)
-        finally:
-            pass
-        server_running=True 
+                msg_box("Cannot start server. Check that you have Python 3 installed and listed in the PATH.",MB_OK+MB_ICONERROR)

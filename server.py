@@ -1,10 +1,22 @@
-from flask import Flask, request, send_file
+try:
+    from flask import Flask, request, send_file
+except:
+    print("""
+************************************************
+*    HTML Live Preview could not connect to    *
+*    server. Check that you have Python 3      * 
+*    with Flask installed, and server is       *
+*    running via 'Start server' command.)      *
+*    Press enter to close this window          *
+************************************************
+""")
+    input()
 import os
 import sys
 
-#import logging
-#log = logging.getLogger('werkzeug')
-#log.setLevel(logging.ERROR)
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 #os.chdir('C:\\ProgramFiles\\CudaText3\\py\\cuda_html_live_preview')
 
@@ -72,12 +84,8 @@ fullpath=''
 
 @app.route('/setpath/<path:path>')
 def pathpage(path):
-    print(path)
     global fullpath
-    fullpath=path.replace('##sep##',os.sep)
-    print('path was set')
-    print('PATH WAS SET TO TO: '+path.replace('##sep##',os.sep))
-    os.chdir(path.replace('##sep##',os.sep))
+    os.chdir(path)
     return ''
 
 @app.route('/view')
@@ -98,26 +106,16 @@ def num():
     global num
     return str(nump)
 
-'''
-@app.route('/<path>')
-def path(path):
-    print('---------------------')
-    print(path)
-    print('---------------------')
-    if os.path.exists:
-      return open(path)
-    else:
-      return '404 Error'
-'''
-
 @app.route('/<path:path>')
 def catch_all(path):
-    global fullpath
-    print(fullpath)
-    os.chdir(fullpath)
-    if os.path.exists(os.path.abspath(path)):
-        
-        return send_file(os.path.abspath(path))
-    return 'You want path: %s' % os.path.abspath(path)
+    try:
+        global fullpath
+        print(fullpath)
+        os.chdir(fullpath)
+        if os.path.exists(os.path.abspath(path)):
+            return send_file(os.path.abspath(path))
+        return 'You want path: %s' % os.path.abspath(path)
+    except:
+        return ''
     
 app.run(port=int(sys.argv[1]))
