@@ -112,9 +112,10 @@ def catch_all(path):
         global fullpath
         print(fullpath)
         os.chdir(fullpath)
-        if os.path.exists(os.path.abspath(path)):
-            return send_file(os.path.abspath(path))
-        return 'You want path: %s' % os.path.abspath(path)
+        abspath=os.path.abspath(path)
+        if os.path.exists(abspath):
+            return send_file(abspath)
+        return 'You want path: %s' % abspath
     except:
         return ''
     
