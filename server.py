@@ -118,10 +118,10 @@ def num():
 def catch_all(path):
     try:
         global fullpath
-        print(fullpath)
+        #print(fullpath)
         os.chdir(fullpath)
         abspath=os.path.abspath(path)
-        print(abspath)
+        #print(abspath)
         if os.path.exists(abspath):
             return send_file(abspath)
         return 'You want path: %s' % abspath
