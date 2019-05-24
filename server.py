@@ -1,5 +1,6 @@
 try:
     from flask import Flask, request, send_file
+    from jinja2 import Template, Environment, BaseLoader, FileSystemLoader
 except:
     print("""
 ************************************************
@@ -13,11 +14,11 @@ except:
     input()
 import os
 import sys
-
+'''
 import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
-
+'''
 #os.chdir('C:\\ProgramFiles\\CudaText3\\py\\cuda_html_live_preview')
 
 text=''
@@ -85,13 +86,20 @@ fullpath=''
 @app.route('/setpath/<path:path>')
 def pathpage(path):
     global fullpath
+    fullpath=path
     os.chdir(path)
     return ''
 
 @app.route('/view')
 def view():
     global text 
-    return script+text+'<br>'
+    try:
+        global fullpath
+        os.chdir(fullpath)
+        return script+Environment(loader=FileSystemLoader(fullpath)).from_string(text).render()+'<br>'
+    except:    
+        Environment(loader=FileSystemLoader(fullpath)).from_string(text).render()
+        return script+'Error in template'
     
 @app.route('/set/<new_text>')
 def set(new_text):
@@ -110,12 +118,14 @@ def num():
 def catch_all(path):
     try:
         global fullpath
+        print(fullpath)
         os.chdir(fullpath)
         abspath=os.path.abspath(path)
+        print(abspath)
         if os.path.exists(abspath):
             return send_file(abspath)
         return 'You want path: %s' % abspath
     except:
-        return ''
+        return 'error'
     
 app.run(port=int(sys.argv[1]))

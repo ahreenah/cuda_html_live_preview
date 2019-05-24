@@ -1,11 +1,8 @@
-<html>
- <head>
-  <title> 
-   abc   
-  </title> 
- </head>
- <body>   
-  def 
-  <img src="kitten2.jpg">
- </body>    
-</html>       
+{% extends "text.html" %}
+{% block content %} 
+  def          
+  <img src="kitten2.jpg">  
+  {% for i in [1,2,3] %}
+    {{ i }}
+  {% endfor %}      
+{% endblock %}
