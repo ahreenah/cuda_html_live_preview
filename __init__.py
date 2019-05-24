@@ -38,7 +38,7 @@ class Command:
     def on_change_slow(self, ed_self):
         global server_running
         if server_running:
-            show(str(ed_self.get_text_all()).replace('\n',' ').replace('/','%01'))
+            show(str(ed_self.get_text_all()).replace('\n',' ').replace('/',chr(1)))
     
     def stop_server(self):
         global server_running

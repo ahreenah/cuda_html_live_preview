@@ -106,7 +106,7 @@ def set(new_text):
     global text
     global nump 
     nump+=1
-    text=new_text.replace('%01','/')
+    text=new_text.replace(chr(1),'/')
     return ''
     
 @app.route('/num')
@@ -115,7 +115,7 @@ def num():
     return str(nump)
 
 @app.route('/<path:path>')
-def catch_all(path):
+def catch_all(path):  
     try:
         global fullpath
         #print(fullpath)
