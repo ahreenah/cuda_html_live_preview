@@ -6,9 +6,9 @@ except:
 ************************************************
 *    HTML Live Preview could not connect to    *
 *    server. Check that you have Python 3      * 
-*    with Flask installed, and server is       *
+*    with Flask installed, and server is       * 
 *    running via 'Start server' command.)      *
-*    Press enter to close this window          *
+*    Press Enter to close this window          *
 ************************************************
 """)
     input()
@@ -87,18 +87,43 @@ fullpath=''
 def pathpage(path):
     global fullpath
     fullpath=path
-    os.chdir(path)
+    print('set to: '+fullpath)
+    os.chdir(path) 
     return ''
+
+@app.route('/<path:path>')
+def catch_all(path): 
+    if os.path.exists(path.replace(chr(1),'/')):
+        return send_file(path)
+    if path.startswith('setpath'):
+        return pathpage(path[7:])
+    print('11111111111111111') 
+    try:
+        global fullpath
+        #print(fullpath)
+        print("ABS1:"+path)
+        #os.chdir(fullpath)
+        abspath=path#os.path.abspath(path)
+        print("ABS2:"+abspath)
+        if os.path.exists('/'+abspath):
+            return send_file('/'+abspath)
+        if os.path.exists(path):
+            return send_file(path)
+        return 'You want path: %s' % '/'+abspath
+    except:
+        return 'error'
+
+
 
 @app.route('/view')
 def view():
-    global text 
+    global text  
+    global fullpath
+    print('full path: '+fullpath)
     try:
-        global fullpath
-        os.chdir(fullpath)
         return script+Environment(loader=FileSystemLoader(fullpath)).from_string(text).render()+'<br>'
     except:    
-        Environment(loader=FileSystemLoader(fullpath)).from_string(text).render()
+        Environment(loader=BaseLoader).from_string(text).render()
         return script+'Error in template'
     
 @app.route('/set/<new_text>')
@@ -113,19 +138,5 @@ def set(new_text):
 def num():
     global num
     return str(nump)
-
-@app.route('/<path:path>')
-def catch_all(path):  
-    try:
-        global fullpath
-        #print(fullpath)
-        os.chdir(fullpath)
-        abspath=os.path.abspath(path)
-        #print(abspath)
-        if os.path.exists(abspath):
-            return send_file(abspath)
-        return 'You want path: %s' % abspath
-    except:
-        return 'error'
     
 app.run(port=int(sys.argv[1]))

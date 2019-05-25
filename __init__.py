@@ -20,8 +20,8 @@ def show(text):
     req_text=urllib.parse.quote(req_text)
     path=ed.get_filename()
     if os.sep in path:
-        path=path[:path.rfind(os.sep)]
-    urllib.request.urlopen('http://127.0.0.1:'+port+'/setpath/'+path)
+        path=os.path.dirname(path)#[:path.rfind(os.sep)]
+    urllib.request.urlopen('http://127.0.0.1:'+port+'/setpath/'+path.replace('/',chr(1)))
     urllib.request.urlopen('http://127.0.0.1:'+port+'/set/'+req_text)
     
 class Command:
@@ -37,15 +37,23 @@ class Command:
                 
     def on_change_slow(self, ed_self):
         global server_running
+        print('a')
         if server_running:
-            show(str(ed_self.get_text_all()).replace('\n',' ').replace('/',chr(1)))
+            print('b')
+            print(ed_self.get_text_all())
+            print(str(ed_self.get_text_all()).replace('\n',' ').replace('src=\'','src=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\'','href=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('src=\"','src=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\"','href=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('/',chr(1)))
+            show(str(ed_self.get_text_all()).replace('\n',' ').replace('src=\'','src=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\'','href=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('src=\"','src=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\"','href=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('/',chr(1)))
     
     def stop_server(self):
         global server_running
+        global process
         if server_running:
-            global process
-            process.kill()
+            if process:
+                process.kill()
             server_running=False 
+    
+    def on_exit(self):
+        self.stop_server()
         
     def start_server(self):
         global server_running
@@ -54,14 +62,14 @@ class Command:
         if server_running:
             msg_box('Server is already running.',MB_OK+MB_ICONINFO)
             return
-        
+        server_running=True
         def work(python):
             global process
-            process=Popen([
-                python,
-                os.path.dirname(__file__)+os.sep+'server.py',
-                port
-                ])
+            script=os.path.dirname(__file__)+os.sep+'server.py'
+            if os.name=='nt':
+                process=Popen([python,script,port])
+            else:
+                os.system('xterm -e "{} {} {}" &'.format(python, script, port))
             Popen([
                 browser_name, 
                 '127.0.0.1:'+port+'/view'
