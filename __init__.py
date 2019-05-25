@@ -7,22 +7,20 @@ from subprocess import Popen, PIPE
 
 fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_html_live_preview.ini')
 
-def get_browser_name():
-    return ini_read(fn_config,'op','browser_path','chrome')
-
 port=ini_read(fn_config,'op','port','5000')
-browser_name=get_browser_name()
+browser_name=ini_read(fn_config,'op','browser_path','chrome')
 server_running=False
+process=None
 
 def show(text):
     global port
-    req_text=text 
-    req_text=urllib.parse.quote(req_text)
-    path=ed.get_filename()
-    if os.sep in path:
-        path=os.path.dirname(path)#[:path.rfind(os.sep)]
-    urllib.request.urlopen('http://127.0.0.1:'+port+'/setpath/'+path.replace('/','%01'))
-    urllib.request.urlopen('http://127.0.0.1:'+port+'/set/'+req_text)
+    text=text.replace('/',chr(1))
+    path=os.path.dirname(ed.get_filename())
+    path=path.replace('/',chr(1))
+    if not path:
+        return
+    urllib.request.urlopen('http://127.0.0.1:'+port+'/setpath/'+urllib.parse.quote(path))
+    urllib.request.urlopen('http://127.0.0.1:'+port+'/set/'+urllib.parse.quote(text))
     
 class Command:
 
@@ -38,7 +36,7 @@ class Command:
     def on_change_slow(self, ed_self):
         global server_running
         if server_running:
-            show(str(ed_self.get_text_all()).replace('\n',' ').replace('src=\'','src=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\'','href=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('src=\"','src=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\"','href=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('/','%01'))
+            show(str(ed_self.get_text_all()).replace('\n',' ').replace('src=\'','src=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\'','href=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('src=\"','src=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\"','href=\"/'+os.path.dirname(ed.get_filename())+os.sep))
     
     def stop_server(self):
         global server_running
