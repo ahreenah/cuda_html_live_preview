@@ -86,6 +86,7 @@ fullpath=''
 @app.route('/setpath/<path:path>')
 def pathpage(path):
     global fullpath
+    path=path.replace(chr(1),'/')
     fullpath=path
     print('set to: '+fullpath)
     os.chdir(path) 
@@ -93,11 +94,12 @@ def pathpage(path):
 
 @app.route('/<path:path>')
 def catch_all(path): 
-    if os.path.exists(path.replace('%01','/')):
+    path=path.replace(chr(1),'/')
+    if os.path.exists(path):
         return send_file(path)
     if path.startswith('setpath'):
         return pathpage(path[7:])
-    print('11111111111111111') 
+    #print('11111111111111111') 
     try:
         global fullpath
         #print(fullpath)
@@ -131,7 +133,7 @@ def set(new_text):
     global text
     global nump 
     nump+=1
-    text=new_text.replace('%01','/')
+    text=new_text.replace(chr(1),'/')
     return ''
     
 @app.route('/num')
