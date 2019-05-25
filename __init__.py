@@ -21,7 +21,7 @@ def show(text):
     path=ed.get_filename()
     if os.sep in path:
         path=os.path.dirname(path)#[:path.rfind(os.sep)]
-    urllib.request.urlopen('http://127.0.0.1:'+port+'/setpath/'+path.replace('/',chr(1)))
+    urllib.request.urlopen('http://127.0.0.1:'+port+'/setpath/'+path.replace('/','%01'))
     urllib.request.urlopen('http://127.0.0.1:'+port+'/set/'+req_text)
     
 class Command:
@@ -37,12 +37,8 @@ class Command:
                 
     def on_change_slow(self, ed_self):
         global server_running
-        print('a')
         if server_running:
-            print('b')
-            print(ed_self.get_text_all())
-            print(str(ed_self.get_text_all()).replace('\n',' ').replace('src=\'','src=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\'','href=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('src=\"','src=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\"','href=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('/',chr(1)))
-            show(str(ed_self.get_text_all()).replace('\n',' ').replace('src=\'','src=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\'','href=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('src=\"','src=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\"','href=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('/',chr(1)))
+            show(str(ed_self.get_text_all()).replace('\n',' ').replace('src=\'','src=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\'','href=\'/'+os.path.dirname(ed.get_filename())+os.sep).replace('src=\"','src=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('href=\"','href=\"/'+os.path.dirname(ed.get_filename())+os.sep).replace('/','%01'))
     
     def stop_server(self):
         global server_running

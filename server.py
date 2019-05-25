@@ -93,7 +93,7 @@ def pathpage(path):
 
 @app.route('/<path:path>')
 def catch_all(path): 
-    if os.path.exists(path.replace(chr(1),'/')):
+    if os.path.exists(path.replace('%01','/')):
         return send_file(path)
     if path.startswith('setpath'):
         return pathpage(path[7:])
@@ -131,7 +131,7 @@ def set(new_text):
     global text
     global nump 
     nump+=1
-    text=new_text.replace(chr(1),'/')
+    text=new_text.replace('%01','/')
     return ''
     
 @app.route('/num')
