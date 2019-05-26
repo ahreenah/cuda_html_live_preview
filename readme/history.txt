@@ -2,6 +2,7 @@
 2019.05.27
 + refactored code
 * changed section in config file to: Windows, Linux, Darwin etc.
++ added config option "server_command" (Unix)
 
 2019.05.26
 + support for Linux (and other Unixes)

@@ -17,6 +17,7 @@ class Command:
 
         self.browser=ini_read(fn_config,section,'browser','chrome')
         self.port=ini_read(fn_config,section,'port','5000')
+        self.server_command=ini_read(fn_config,section,'server_command','xterm -e "{python} {script} {port}" &')
         self.server_running=False
         self.process=None
 
@@ -37,6 +38,9 @@ class Command:
 
         ini_write(fn_config,section,'browser',self.browser)
         ini_write(fn_config,section,'port',self.port)
+        if not is_win:
+            ini_write(fn_config,section,'server_command',self.server_command)
+
         file_open(fn_config)
 
     def on_change_slow(self, ed_self):
@@ -76,7 +80,7 @@ class Command:
         if is_win:
             self.process=Popen([python,script,self.port])
         else:
-            os.system('xterm -e "{} {} {}" &'.format(python, script, self.port))
+            os.system(self.server_command.format(python=python, script=script, port=self.port))
         self.server_running=True
         self.open_browser()
 
