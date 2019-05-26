@@ -7,21 +7,29 @@ How to use
 ----------
 
 - Install Python 3 from official site. With adding it to PATH variable. 
-- Install Flask in Python. Run in command prompt:
-  pip install flask
+- Install Flask in Python.
+  Run in terminal:
+    pip install flask
+  on Unix:
+    pip3 install flask
 
 - In CudaText, specify path to browser: "Plugins / HTML Live Preview / Config".
-  For example: "chrome", "firefox", or full path to EXE file.
+  For example: "chrome", "firefox", "opera" or full path to executable file.
   Restart CudaText.
 
 - In CudaText, call "Plugins / HTML Live Preview / Start server".
-  This should show console window with running Flask server.
+  This should show terminal with running Flask server.
+  Browser should open at http://127.0.0.1:5000/view
 
-After that, just edit some HTML file (lexer name can be any with "HTML" word).
-Server will detect your changes and browser should show the preview.
+After that, just edit some HTML file.
+Server will detect your changes (after last editing, make small pause)
+and browser should show the preview.
+
+Lexer names handled: any with "HTML" and Junja2.
 
 Note: on clicking any link in the browser, live preview stops, until you return to the 
 http://127.0.0.1:5000/view
+
 
 Browsers
 --------
@@ -35,9 +43,10 @@ Supported:
 Not supported:
 - Internet Explorer
 
+
 About
 -----
 Authors:
   Medvosa, https://github.com/medvosa
-  Alexey T. (CudaText)
+  Alexey Torgashin (CudaText)
 License: MIT
