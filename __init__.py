@@ -4,82 +4,84 @@ import urllib
 from urllib import parse, request
 from subprocess import Popen, PIPE
 
-fn_config=os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_html_live_preview.ini')
-section='windows' if os.name=='nt' else 'unix'
-script=os.path.dirname(__file__)+os.sep+'server.py'
+fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_html_live_preview.ini')
+is_win = os.name=='nt'
+section = 'windows' if is_win else 'unix'
+script = os.path.dirname(__file__)+os.sep+'server.py'
 
-browser_name=ini_read(fn_config,section,'browser','chrome')
-port=ini_read(fn_config,section,'port','5000')
-server_running=False
-process=None
-
-def show(text):
-    global port
-    text=text.replace('/',chr(1))
-    path=os.path.dirname(ed.get_filename())
-    path=path.replace('/',chr(1))
-    if not path:
-        return
-    try:
-        urllib.request.urlopen('http://127.0.0.1:'+port+'/setpath/'+urllib.parse.quote(path))
-        urllib.request.urlopen('http://127.0.0.1:'+port+'/set/'+urllib.parse.quote(text))
-    except:
-        msg_status('HTML Live Preview: Cannot connect to server')
 
 class Command:
 
     def __init__(self):
-        pass
+
+        self.browser=ini_read(fn_config,section,'browser','chrome')
+        self.port=ini_read(fn_config,section,'port','5000')
+        self.server_running=False
+        self.process=None
+
+    def show(self, text):
+
+        text=text.replace('/',chr(1))
+        path=os.path.dirname(ed.get_filename())
+        path=path.replace('/',chr(1))
+        if not path:
+            return
+        try:
+            urllib.request.urlopen('http://127.0.0.1:'+self.port+'/setpath/'+urllib.parse.quote(path))
+            urllib.request.urlopen('http://127.0.0.1:'+self.port+'/set/'+urllib.parse.quote(text))
+        except:
+            msg_status('HTML Live Preview: Cannot connect to server')
 
     def config(self):
-        ini_write(fn_config,section,'browser',browser_name)
-        ini_write(fn_config,section,'port',port)
+
+        ini_write(fn_config,section,'browser',self.browser)
+        ini_write(fn_config,section,'port',self.port)
         file_open(fn_config)
 
     def on_change_slow(self, ed_self):
-        if not server_running:
+
+        if not self.server_running:
             return
         text=ed_self.get_text_all()
         text=text.replace('\n',' ')
-        show(text)
+        self.show(text)
 
     def stop_server(self):
-        global server_running
-        global process
-        if server_running:
-            if os.name=='nt':
-                if process:
-                    process.kill()
-                server_running=False
+
+        if self.server_running:
+            if is_win:
+                if self.process:
+                    self.process.kill()
+                    self.process=None
+                self.server_running=False
             else:
                 msg_box('To stop server on Unix, press Ctrl+C in the server Terminal window', MB_OK+MB_ICONINFO)
 
     def on_exit(self):
-        self.stop_server()
+
+        if is_win:
+            self.stop_server()
 
     def open_browser(self):
-        print('Opening browser:', browser_name)
+
+        print('Opening browser:', self.browser)
         try:
-            Popen([browser_name, '127.0.0.1:'+port+'/view'])
+            Popen([self.browser, '127.0.0.1:'+self.port+'/view'])
         except:
-            msg_box('Cannot open browser:\n'+browser_name, MB_OK+MB_ICONERROR)
+            msg_box('Cannot open browser:\n'+self.browser, MB_OK+MB_ICONERROR)
 
     def start_ex(self, python):
-        global process
-        global server_running
-        if os.name=='nt':
-            process=Popen([python,script,port])
+
+        if is_win:
+            self.process=Popen([python,script,self.port])
         else:
-            os.system('xterm -e "{} {} {}" &'.format(python, script, port))
-        server_running=True
+            os.system('xterm -e "{} {} {}" &'.format(python, script, self.port))
+        self.server_running=True
         self.open_browser()
 
     def start_server(self):
-        global server_running
-        global port
-        global script
 
-        if server_running:
+        if self.server_running:
             msg_status('HTML Live Preview: Server is already running')
             return
 
