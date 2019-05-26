@@ -59,7 +59,10 @@ class Command:
 
     def open_browser(self):
         print('Opening browser:', browser_name)
-        Popen([browser_name, '127.0.0.1:'+port+'/view'])
+        try:
+            Popen([browser_name, '127.0.0.1:'+port+'/view'])
+        except:
+            msg_box('Cannot open browser:\n'+browser_name, MB_OK+MB_ICONERROR)
 
     def start_ex(self, python):
         global process
