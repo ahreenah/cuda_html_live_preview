@@ -25,7 +25,7 @@ After that, just edit some HTML file.
 Server will detect your changes (after last editing, make small pause)
 and browser should show the preview.
 
-Lexer names handled: any with "HTML" and Junja2.
+Lexer names handled: any with "HTML" and "Jinja2".
 
 Note: on clicking any link in the browser, live preview stops, until you return to the 
 http://127.0.0.1:5000/view
