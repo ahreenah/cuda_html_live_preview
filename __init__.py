@@ -1,4 +1,5 @@
 import os
+import platform
 from cudatext import *
 import urllib
 from urllib import parse, request
@@ -6,7 +7,7 @@ from subprocess import Popen, PIPE
 
 fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_html_live_preview.ini')
 is_win = os.name=='nt'
-section = 'windows' if is_win else 'unix'
+section = platform.system()
 script = os.path.dirname(__file__)+os.sep+'server.py'
 
 

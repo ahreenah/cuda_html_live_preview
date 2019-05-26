@@ -1,3 +1,8 @@
+
+2019.05.27
++ refactored code
+* changed section in config file to: Windows, Linux, Darwin etc.
+
 2019.05.26
 + support for Linux (and other Unixes)
 + added command "Open browser window"
