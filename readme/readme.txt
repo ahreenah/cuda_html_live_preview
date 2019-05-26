@@ -1,7 +1,7 @@
 Plugin for CudaText.
 Allows to use live preview of HTML files in the browser, during editing, without need to reload browser page.
-Requires Python 3 and Flask framework in it.
-Currently works only on Windows.
+Requires Python 3 and Flask framework.
+Tested on Windows 10 and Linux (Ubuntu 19).
 
 How to use
 ----------
@@ -37,5 +37,7 @@ Not supported:
 
 About
 -----
-Author: Medvosa, https://github.com/medvosa
+Authors:
+  Medvosa, https://github.com/medvosa
+  Alexey T. (CudaText)
 License: MIT
