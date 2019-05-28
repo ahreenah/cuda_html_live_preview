@@ -1,1 +1,13 @@
-2019.05.23 Initial version
+
+2019.05.27
++ refactored code
+* changed section in config file to: Windows, Linux, Darwin etc.
++ added config option "server_command" (Unix)
+
+2019.05.26
++ support for Linux (and other Unixes)
++ added command "Open browser window"
+- fixed support for pictures/css on pages
+
+2019.05.23
+Initial version

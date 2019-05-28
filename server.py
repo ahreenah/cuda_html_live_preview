@@ -1,3 +1,5 @@
+import os
+import sys
 try:
     from flask import Flask, request, send_file
     from jinja2 import Template, Environment, BaseLoader, FileSystemLoader
@@ -5,26 +7,23 @@ except:
     print("""
 ************************************************
 *    HTML Live Preview could not connect to    *
-*    server. Check that you have Python 3      * 
-*    with Flask installed, and server is       * 
-*    running via 'Start server' command.)      *
-*    Press Enter to close this window          *
+*    server. Check that you have Python 3      *
+*    with Flask installed, and server is       *
+*    running via 'Start server' command.       *
+*    Press Enter to close this window.         *
 ************************************************
 """)
     input()
-import os
-import sys
+
 '''
 import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 '''
-#os.chdir('C:\\ProgramFiles\\CudaText3\\py\\cuda_html_live_preview')
-
 text=''
 nump=0
 
-app=Flask(__name__) 
+app=Flask(__name__)
 app.config['DEBUG'] = False
 
 script='''
@@ -86,59 +85,47 @@ fullpath=''
 @app.route('/setpath/<path:path>')
 def pathpage(path):
     global fullpath
-    path=path.replace(chr(1),'/')
-    fullpath=path
-    print('set to: '+fullpath)
-    os.chdir(path) 
+    fullpath=path.replace(chr(1),'/')
+    #print('set path: '+fullpath)
     return ''
 
-@app.route('/<path:path>')
-def catch_all(path): 
-    path=path.replace(chr(1),'/')
-    if os.path.exists(path):
-        return send_file(path)
-    if path.startswith('setpath'):
-        return pathpage(path[7:])
-    #print('11111111111111111') 
-    try:
-        global fullpath
-        #print(fullpath)
-        print("ABS1:"+path)
-        #os.chdir(fullpath)
-        abspath=path#os.path.abspath(path)
-        print("ABS2:"+abspath)
-        if os.path.exists('/'+abspath):
-            return send_file('/'+abspath)
-        if os.path.exists(path):
-            return send_file(path)
-        return 'You want path: %s' % '/'+abspath
-    except:
-        return 'error'
 
+@app.route('/<path:path>')
+def catch_all(path):
+    global fullpath
+    if path.startswith('setpath/'):
+        return pathpage(path[7:])
+    path=fullpath+os.sep+path
+    #print('path:', path)
+    if os.path.exists(path):
+        #print('send file:', path)
+        return send_file(path)
+    else:
+        return ''
 
 
 @app.route('/view')
 def view():
-    global text  
+    global text
     global fullpath
-    print('full path: '+fullpath)
+    #print('full path: '+fullpath)
     try:
         return script+Environment(loader=FileSystemLoader(fullpath)).from_string(text).render()+'<br>'
-    except:    
+    except:
         Environment(loader=BaseLoader).from_string(text).render()
         return script+'Error in template'
-    
+
 @app.route('/set/<new_text>')
 def set(new_text):
     global text
-    global nump 
+    global nump
     nump+=1
     text=new_text.replace(chr(1),'/')
     return ''
-    
+
 @app.route('/num')
 def num():
     global num
     return str(nump)
-    
+
 app.run(port=int(sys.argv[1]))

@@ -4,19 +4,29 @@ desc=Provides live preview for HTML files with support of dynamically linked sou
 type=cudatext-plugin
 subdir=cuda_html_live_preview
 homepage=https://github.com/medvosa/cuda_html_live_preview
-$html=regex:.*HTML.*
+$html=regex:.*(HTML|Jinja).*
 
 [item1]
 section=events
 events=on_change_slow,on_exit
-lexers=$html,Jinja2
+lexers=$html
 
 [item2]
+section=commands
+caption=HTML Live Preview\Start server
+method=start_server
+
+[item3]
 section=commands
 caption=HTML Live Preview\Stop server
 method=stop_server
 
-[item3]
+[item5]
 section=commands
-caption=HTML Live Preview\Start server
-method=start_server
+caption=HTML Live Preview\Open browser window
+method=open_browser
+
+[item10]
+section=commands
+caption=HTML Live Preview\Config
+method=config
