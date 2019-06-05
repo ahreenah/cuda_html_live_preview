@@ -21,7 +21,7 @@ class Command:
         self.server_running=False
         self.process=None
 
-    def show(self, text):
+    def show(self, text, lex):
 
         text=text.replace('/',chr(1))
         path=os.path.dirname(ed.get_filename())
@@ -29,6 +29,10 @@ class Command:
         if not path:
             return
         try:
+            if 'HTML' in lex:
+                urllib.request.urlopen('http://127.0.0.1:'+self.port+'/setmarkdown/0')
+            else:
+                urllib.request.urlopen('http://127.0.0.1:'+self.port+'/setmarkdown/1')
             urllib.request.urlopen('http://127.0.0.1:'+self.port+'/setpath/'+urllib.parse.quote(path))
             urllib.request.urlopen('http://127.0.0.1:'+self.port+'/set/'+urllib.parse.quote(text))
         except:
@@ -48,8 +52,8 @@ class Command:
         if not self.server_running:
             return
         text=ed_self.get_text_all()
-        text=text.replace('\n',' ')
-        self.show(text)
+        text=text.replace('\n',chr(3))
+        self.show(text,ed.get_prop(PROP_LEXER_FILE))
 
     def stop_server(self):
 

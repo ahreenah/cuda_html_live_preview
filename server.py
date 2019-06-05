@@ -3,6 +3,7 @@ import sys
 try:
     from flask import Flask, request, send_file
     from jinja2 import Template, Environment, BaseLoader, FileSystemLoader
+    import markdown
 except:
     print("""
 ************************************************
@@ -25,6 +26,11 @@ nump=0
 
 app=Flask(__name__)
 app.config['DEBUG'] = False
+
+#from flaskext.markdown import Markdown
+#Markdown(app)
+
+is_markdown=False
 
 script='''
 <script type='text/javascript'>
@@ -82,6 +88,12 @@ setInterval(monitor,1000);
 
 fullpath=''
 
+@app.route('/setmarkdown/<val>')
+def markdownpage(val):
+    global is_markdown
+    is_markdown=(val=='1')
+    return 'value is set to: '+str(is_markdown)
+
 @app.route('/setpath/<path:path>')
 def pathpage(path):
     global fullpath
@@ -107,20 +119,25 @@ def catch_all(path):
 @app.route('/view')
 def view():
     global text
+    global is_markdown
     global fullpath
     #print('full path: '+fullpath)
     try:
+        if is_markdown:
+            return script+markdown.markdown(text)
         return script+Environment(loader=FileSystemLoader(fullpath)).from_string(text).render()+'<br>'
     except:
         Environment(loader=BaseLoader).from_string(text).render()
         return script+'Error in template'
 
 @app.route('/set/<new_text>')
-def set(new_text):
+def set(new_text): 
     global text
     global nump
     nump+=1
     text=new_text.replace(chr(1),'/')
+    text=text.replace(chr(3),'\n')
+    print(text)
     return ''
 
 @app.route('/num')
