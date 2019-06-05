@@ -1,20 +1,32 @@
 import os
 import sys
+
+try:
+    import markdown
+except:
+    print("""
+************************************************
+*  Python module "markdown" is not installed.  *
+*  Press Enter to close this window.           *
+************************************************
+""")
+    input()
+    quit()
+
 try:
     from flask import Flask, request, send_file
     from jinja2 import Template, Environment, BaseLoader, FileSystemLoader
-    import markdown
 except:
     print("""
 ************************************************
 *    HTML Live Preview could not connect to    *
 *    server. Check that you have Python 3      *
-*    with Flask installed, and server is       *
-*    running via 'Start server' command.       *
-*    Press Enter to close this window.         *
+*    with Flask installed.                     *
+*    Press Enter close this window.            *
 ************************************************
 """)
     input()
+    quit()
 
 '''
 import logging
