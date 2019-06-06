@@ -3,10 +3,8 @@ import sys
 try:
     from flask import Flask, request, send_file
     from jinja2 import Template, Environment, BaseLoader, FileSystemLoader
-    import markdown
-    from markdown.extensions import *
-    import markdown.extensions.tables
-except:
+    import markdown2 as markdown
+except:                    
     print("""
 ************************************************
 *    HTML Live Preview could not connect to    *
@@ -126,11 +124,18 @@ def view():
     #print('full path: '+fullpath)
     try:
         if is_markdown:
-            return script+markdown.markdown(text, extensions=['markdown.extensions.tables'])
+            return script+markdown.markdown(text, extras=[
+                  'wiki-tables',
+                  'footnotes',
+                  'fenced_code',
+                  'footnotes',
+                  'attr_list',
+                  'def_list',
+                  'tables',
+                  'abbr'])
         return script+Environment(loader=FileSystemLoader(fullpath)).from_string(text).render()+'<br>'
     except:
         Environment(loader=BaseLoader).from_string(text).render()
-        markdown.markdown(text, extensions=['markdown.extensions.tables'])
         return script+'Error in template'
 
 @app.route('/set/<new_text>')
