@@ -1,9 +1,20 @@
 import os
 import sys
 try:
+    import markdown2 as markdown
+except:
+    print("""
+************************************************
+*  Python module "markdown2" is not installed. *
+*  Press Enter to close this window.           *
+************************************************
+""")
+    input()
+    quit()
+
+try:
     from flask import Flask, request, send_file
     from jinja2 import Template, Environment, BaseLoader, FileSystemLoader
-    import markdown2 as markdown
 except:                    
     print("""
 ************************************************
@@ -15,6 +26,7 @@ except:
 ************************************************
 """)
     input()
+    quit()
 
 '''
 import logging
