@@ -9,7 +9,7 @@ $html=regex:.*(HTML|Jinja).*
 [item1]
 section=events
 events=on_change_slow,on_exit
-lexers=$html|Markdown
+lexers=regex:.*HTML.*|Jinja.*|Markdown
 
 [item2]
 section=commands

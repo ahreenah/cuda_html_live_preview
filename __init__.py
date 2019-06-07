@@ -29,10 +29,8 @@ class Command:
         if not path:
             return
         try:
-            if 'HTML' in lex:
-                urllib.request.urlopen('http://127.0.0.1:'+self.port+'/setmarkdown/0')
-            else:
-                urllib.request.urlopen('http://127.0.0.1:'+self.port+'/setmarkdown/1')
+            flag = '1' if 'Markdown' in lex else '0'
+            urllib.request.urlopen('http://127.0.0.1:'+self.port+'/setmarkdown/'+flag)
             urllib.request.urlopen('http://127.0.0.1:'+self.port+'/setpath/'+urllib.parse.quote(path))
             urllib.request.urlopen('http://127.0.0.1:'+self.port+'/set/'+urllib.parse.quote(text))
         except:
