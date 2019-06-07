@@ -1,6 +1,6 @@
 Plugin for CudaText.
-Allows to use live preview of HTML files in the browser, during editing, without need to reload browser page.
-Requires Python 3 and Flask framework.
+Allows to use live preview of HTML and Markdown files in the browser, during editing, without need to reload browser page.
+Requires Python 3, Flask framework and Markdown2 library.
 Tested on Windows 10 and Linux (Ubuntu 19).
 
 How to use
@@ -10,8 +10,10 @@ How to use
 - Install Flask in Python.
   Run in terminal:
     pip install flask
+    pip install markdown2
   on Unix:
     pip3 install flask
+    pip3 install markdown2
 
 - In CudaText, specify path to browser: "Plugins / HTML Live Preview / Config".
   For example: "chrome", "firefox", "opera" or full path to executable file.
@@ -25,7 +27,7 @@ After that, just edit some HTML file.
 Server will detect your changes (after last editing, make small pause)
 and browser should show the preview.
 
-Lexer names handled: any with "HTML" and "Jinja2".
+Lexer names handled: any with "HTML", "Jinja2" and "Markdown".
 
 Note: on clicking any link in the browser, live preview stops, until you return to the 
 http://127.0.0.1:5000/view
